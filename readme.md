@@ -1,0 +1,7 @@
+- Spinlock
+- Alternância Explícita
+- Produtor e consumidor com Sleep/WAkeup
+- Produtor e consumidor com semaforo
+- Sleep e Wakeup
+- Instrução TSL
+- Semaforo
