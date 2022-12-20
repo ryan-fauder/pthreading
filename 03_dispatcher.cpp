@@ -15,7 +15,6 @@ using namespace std;
 sem_t has_work; // 0 -> No work to do;
 sem_t buffer; // 0 -> No position in buffer;
 sem_t mutex;
-sem_t print;
 queue<string> q;
 queue<string> for_work;
 fstream file;
@@ -31,13 +30,11 @@ void* add_work(void* arg)
     if(input == "0") break;
     sem_wait(&mutex);
     q.push(input);
+    printf("Insira um arquivo: ");
     sem_post(&mutex);
     sem_post(&buffer);
 
 
-    sem_wait(&print);
-    printf("Insira um arquivo: ");
-    sem_post(&print);
   }
   return NULL;
 }
@@ -50,13 +47,11 @@ void* get_work(void *arg)
     string filename = q.front();
     q.pop();
     for_work.push(filename);
+    cout << "Lets open " << filename << "\n";
 
     sem_post(&mutex);
     sem_post(&has_work);
 
-    sem_wait(&print);
-    cout << "Lets open " << filename << "\n";
-    sem_post(&print);
   }
   return NULL;
 }
@@ -66,13 +61,11 @@ void readfile(){
   string filename = for_work.front();
   file.open(filename);
   if (file.is_open()) {
-    sem_wait(&print);
     cout << filename << " ";
     cout << "CONTENT -- ";
     file >> text;
     cout << text;
     cout << " --\n";
-    sem_post(&print);
   }
   for_work.pop();
   file.close();
@@ -82,10 +75,8 @@ void* work(void* arg){
   int * i = (int *) arg;
   while(true){
     sem_wait(&has_work);
-    sem_wait(&print);
-    cout << "I'm worker " << *i << "\n";
-    sem_post(&print);
     sem_wait(&mutex);
+    cout << "I'm worker " << *i << "\n";
     readfile();
     sem_post(&mutex);
   }
@@ -97,12 +88,16 @@ int main()
     pthread_t dispatcher, reader;
     vector<pthread_t> workers;
     workers.resize(3);
+
+    // File Queue
     q.push("file1.txt");
     q.push("file2.txt");
     q.push("file2.txt");
     q.push("file3.txt");
+
+    // Mutex
     sem_init(&mutex, 0, 1);
-    sem_init(&print, 0, 1);
+    
     sem_init(&buffer, 0, 4);
     sem_init(&has_work, 0, 0);
     vector<int> index = {1, 2, 3};
@@ -117,7 +112,6 @@ int main()
     pthread_join(reader, NULL);
     sleep(2);
     sem_destroy(&mutex);
-    sem_destroy(&print);
     sem_destroy(&buffer);
     sem_destroy(&has_work);
     return 0;
