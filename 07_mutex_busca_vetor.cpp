@@ -8,7 +8,7 @@
 #define NUM_FILES 10
 using namespace std;
 
-int max_value;
+int max_value = 0;
 sem_t mutex;
 
 typedef struct
@@ -29,8 +29,6 @@ void *find_max_value(void *threadarg)
 {
   thdata *data;
   data = (thdata *) threadarg;
-
-  int max_value = 0;
   fstream file_io;
   file_io.open(data->filename);
   if (!file_io.is_open())
@@ -42,7 +40,9 @@ void *find_max_value(void *threadarg)
   int value;
   while (file_io >> value)
   {
+    sem_wait(&mutex);
     max_value = max(max_value, value);
+    sem_post(&mutex);
   }
 
   file_io.close();
