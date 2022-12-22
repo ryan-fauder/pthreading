@@ -52,9 +52,7 @@ void * mul_(void * ptr)
 
 void * sub_(void * ptr)
 {
-  int value;
-  scanf("%d", &value);
+  N -= 100;
   printf("%s: ", (char *) ptr);
-  N -= value;
   return NULL;
 }

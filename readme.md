@@ -1,11 +1,11 @@
 # Threading
 
-- [ ] Spinlock
 - [ ] Alternância Explícita
 - [ ] Produtor e consumidor com Sleep/WAkeup
-- [ ] Produtor e consumidor com semaforo
-- [ ] Sleep e Wakeup
-- [ ] Semaforo
+- [x] Produtor e consumidor com semaforo
+- [ ] Sleep e Wakeup?
+- [x] Semaforo
+- [ ] Compartilhamento de memória em processos
 
 ## Mais ideias
 
