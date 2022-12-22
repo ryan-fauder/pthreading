@@ -2,7 +2,7 @@ import random
 
 def generate_files(qtt_files, qtt_numbers):
   for i in range(qtt_files):
-    filename = f"arquivo_{i}.txt"
+    filename = f"vetor_{i}.txt"
     file_io = open(filename, "w")
     for _ in range(qtt_numbers):
       value = random.randint(-1000, 1000)
