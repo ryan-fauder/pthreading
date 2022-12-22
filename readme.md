@@ -1,11 +1,13 @@
 # Threading
 
 - [ ] Alternância Explícita
+- [ ] Solução de Peterson
 - [ ] Produtor e consumidor com Sleep/WAkeup
 - [x] Produtor e consumidor com semaforo
 - [ ] Sleep e Wakeup?
 - [x] Semaforo
-- [ ] Compartilhamento de memória em processos
+- [x] Compartilhamento de memória em processos
+- [x] Problema clássico do jantar dos filósofos
 
 ## Mais ideias
 
@@ -28,4 +30,3 @@ Cálculo do fatorial de um número: Dado um número inteiro, calcule seu fatoria
 Cálculo da soma de elementos em uma matriz: Dado uma matriz de números inteiros, calcule a soma de todos os elementos da matriz. Você pode criar uma thread para calcular a soma de cada parte da matriz, o que pode acelerar o processo se a matriz for muito grande.
 
 Cálculo da média de elementos em uma matriz: Dado uma matriz de números inteiros, calcule a média de todos os elementos da matriz. Você pode criar uma thread para calcular a média de cada parte da matriz, o que pode acelerar o processo se a matriz for muito grande.
-
