@@ -10,74 +10,76 @@ int total = 0;
 int p = 0; // produced to buffer
 int c = 0; // consumed from ubffer
 int value = 10;
-void* producer(void* arg)
+void *producer(void *arg)
 {
-    //wait
-    sem_wait(&to_use);
-    //sem_wait(&mutex);
-    printf("\nEntered..\n");
-  
-    p++;
-    //critical section
-    //sleep(2);
-    printf("Producer: %d", total);
+  // wait
+  sem_wait(&to_use);
+  sem_wait(&mutex);
 
-    //signal
-    printf("\nJust Exiting...\n");
-    //sem_post(&mutex);
-    sem_post(&used);
-    return NULL;
+  printf("\nEntered..\n");
+
+  p++;
+  printf("Producer: %d", total);
+
+  printf("\nJust Exiting...\n");
+  sem_post(&mutex);
+  sem_post(&used);
+  return NULL;
 }
 
-void* consumer(void* arg)
+void *consumer(void *arg)
 {
-    //wait
-    
-    sem_wait(&used);
-    sem_wait(&mutex);
-    printf("\nEntered..\n");
+  // wait
 
-    c++;
-    total++;
-    //critical section
-    sleep(5);
+  sem_wait(&used);
+  sem_wait(&mutex);
+  printf("\nEntered..\n");
 
-    printf("Consumer: %d", total);
-    //signal
-    printf("\nJust Exiting...\n");
-    sem_post(&mutex);
-    sem_post(&to_use);
-    return NULL;
+  c++;
+  total++;
+  // critical section
+  sleep(5);
+
+  printf("Consumer: %d", total);
+  // signal
+  printf("\nJust Exiting...\n");
+  sem_post(&mutex);
+  sem_post(&to_use);
+  return NULL;
 }
 
-void* scanf1(void* arg)
+void *scanf1(void *arg)
 {
   printf("Escreva um numero: ");
   scanf("%d", &value);
   return NULL;
 }
-  
 
 int main()
 {
-    sem_init(&mutex, 0, 1);
-    sem_init(&to_use, 0, N);
-    sem_init(&used, 0, 0);
-    pthread_t t1,t2,t3;
-    pthread_create(&t1,NULL,scanf1,NULL);
+  sem_init(&mutex, 0, 1);
+  sem_init(&to_use, 0, N);
+  sem_init(&used, 0, 0);
+  pthread_t t1, t2, t3;
+  pthread_create(&t1, NULL, scanf1, NULL);
 
-    while(total < 6){
+  while (true)
+  {
 
-      pthread_create(&t2,NULL,producer,NULL);
-      pthread_create(&t3,NULL,consumer,NULL);
-      printf("%d\n", total);
-      sleep(2);
-    }
+    pthread_create(&t2, NULL, producer, NULL);
+    pthread_create(&t3, NULL, consumer, NULL);
+    sem_wait(&mutex);
+    if (total >= 6)
+      break;
+    printf("%d\n", total);
+    sem_post(&mutex);
+    sleep(2);
+  }
 
-    //pthread_join(t1, NULL);
-    printf("\n%d\n", value);
-    sem_destroy(&mutex);
-    sem_destroy(&to_use);
-    sem_destroy(&used);
-    return 0;
+  pthread_join(t1, NULL);
+  printf("\n%d\n", value);
+  sem_destroy(&mutex);
+  sem_destroy(&to_use);
+  sem_destroy(&used);
+  return 0;
 }
